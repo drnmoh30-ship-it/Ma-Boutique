@@ -1,70 +1,81 @@
-# Getting Started with Create React App
+# 🛍️ Ma Boutique React
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Boutique en ligne (démo professionnelle) de parfums, high-tech et accessoires — 100 % React, sans backend.
+Paiement à la livraison, panier persistant, favoris et tunnel de commande avec validation.
 
-## Available Scripts
+## Démarrage
 
-In the project directory, you can run:
+```bash
+npm install
+npm start        # http://localhost:3000
+npm test         # tests unitaires (watch mode)
+npm run build    # build de production dans /build
+```
 
-### `npm start`
+## Fonctionnalités
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **Catalogue** : 14 produits, 4 catégories, marque, note/avis, remise calculée automatiquement, stock, badges « -X % » et « Nouveau ».
+- **Photos produit locales** (Pexels, libres de droits) : recadrées 4:3, optimisées, avec repli automatique sur un visuel emoji si l'image manque. Voir [CREDITS.md](CREDITS.md).
+- **Recherche instantanée** par nom, marque ou catégorie + **filtre par catégorie** (puces).
+- **Tri** : popularité, prix croissant/décroissant, meilleures notes.
+- **Fiche produit** (modale) : grande photo, prix, description, stock, quantité, ajout au panier, favoris et rubrique « Vous aimerez aussi ».
+- **Favoris** : ajout/retrait depuis la carte ou la fiche, filtre « favoris », persistés.
+- **Panier** (tiroir latéral) : quantités +/− limitées au stock, suppression, sous-total, livraison offerte dès 300 DH, total.
+- **Commande** : formulaire validé (nom, téléphone marocain, ville, adresse) → récapitulatif → confirmation avec numéro de commande.
+- **UX** : notifications avec action « Voir le panier », fermeture des modales par `Échap` / clic extérieur, scroll bloqué, responsive mobile/tablette.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Structure
 
-### `npm test`
+```
+src/
+├── App.js              # État global : filtres, panier, favoris, modales
+├── produitsData.js     # Catalogue + constantes de catégories
+├── Header.js           # En-tête (favoris + panier)
+├── Recherche.js        # Barre de recherche, puces de catégories, tri
+├── ListeProduits.js    # Grille + état vide
+├── Produits.js         # Carte produit (+ Etoiles exporté)
+├── FicheProduit.js     # Modale détail produit
+├── Panier.js           # Tiroir panier
+├── Commande.js         # Formulaire + confirmation de commande
+├── Modal.js            # Modale générique accessible
+├── utils.js            # Formatage prix / pourcentages, validation téléphone
+├── utils.test.js       # Tests unitaires des utilitaires
+├── hooks/
+│   ├── usePanier.js    # Logique panier + persistance localStorage
+│   └── useFavoris.js   # Liste de souhaits + persistance
+├── App.css             # Styles (variables CSS, responsive)
+└── index.js            # Point d'entrée
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+public/images/produits/ # 14 photos produits (p01.jpg … p14.jpg)
+```
 
-### `npm run build`
+## Données
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Tout le catalogue est dans `src/produitsData.js`. Un produit :
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```js
+{
+  id: 1,                      // entier unique
+  nom: "…",
+  marque: "…",
+  categorie: "Parfum",        // doit exister dans CATEGORIES
+  prix: 150,                  // en DH
+  ancienPrix: 199,            // null si pas de promo
+  note: 4.8,                  // 0 à 5
+  avis: 214,
+  stock: 12,                  // 0 = rupture (bouton désactivé)
+  emoji: "🌙",                // visuel de secours
+  fond: ["#1f2a44", "#4a5f8f"],// dégradé du visuel
+  image: "https://…",         // optionnel (null = emoji seul)
+  description: "…",
+}
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Le panier est stocké sous `boutique-panier-v1` (uniquement `{ id, quantite }`), les favoris sous `boutique-favoris-v1`.
+Pour brancher une API réelle, remplacer `produitsData.js` par un `fetch` et adapter `usePanier` (les composants ne changent pas).
 
-### `npm run eject`
+## Qualité
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- Aucun warning de build, aucun `console.error` à l'exécution (vérifié au navigateur).
+- Composants accessibles : `aria-label`, `aria-pressed`, `aria-live`, `role="dialog"`, labels liés aux champs.
+- Test de fumée dans `src/App.test.js`.
