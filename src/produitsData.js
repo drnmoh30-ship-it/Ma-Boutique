@@ -15,7 +15,7 @@ const produits = [
     stock: 12,
     emoji: "🌙",
     fond: ["#1f2a44", "#4a5f8f"],
-    image: "c:\Users\pc\Pictures\Feedback\WhatsApp Image 2026-11-03 at 12.38.04.jpeg",
+    image: "/images/produits/p01.jpg",
     description: "Extrait de parfum boisé et vanillé, idéal pour les soirées.",
   },
   {
